@@ -1,5 +1,6 @@
 from dataclasses import dataclass, fields, astuple
 from urllib.parse import urljoin
+import time
 
 import requests
 from bs4 import BeautifulSoup, Tag
@@ -38,6 +39,7 @@ def parse_quotes() -> list[Quote]:
     next_page = get_page_number(first_page_soup)
     while next_page is not None:
         page_url = urljoin(BASE_URL, f"page/{next_page}/")
+        time.sleep(1)
         text = requests.get(page_url).content
         next_page_soup = BeautifulSoup(text, "html.parser")
         all_quotes.extend(get_single_page_quotes(next_page_soup))
